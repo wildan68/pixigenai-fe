@@ -99,7 +99,7 @@ export default function Register () {
 
         <div className="flex items-center justify-center gap-2">
           <div className="bg-gray-700 h-[1px] flex-1"/>
-          <span className="text-xs text-gray-500">Don't have an account yet?</span>
+          <span className="text-xs text-gray-500">Already have an account?</span>
           <div className="bg-gray-700  h-[1px] flex-1"/>
         </div>
 
