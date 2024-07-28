@@ -3,7 +3,7 @@ import Sidebar from '@layouts/components/Sidebar';
 import Navbar from '@layouts/components/Navbar';
 import { useState } from 'react';
 
-export default function DefaultLayout() {
+export default function DefaultLayout () {
   const [sidebarWidth] = useState(250)
 
   return (

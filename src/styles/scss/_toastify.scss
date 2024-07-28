@@ -1,0 +1,9 @@
+.Toastify {
+  .Toastify__toast-theme--dark {
+    @apply bg-background
+  }
+
+  .Toastify__toast-theme--light {
+    @apply bg-background
+  }
+}

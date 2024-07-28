@@ -47,7 +47,13 @@
         "src/plugins/axios.ts"
       ],
       "@validators": [
-        "src/@core/validators"
+        "src/utils/validators.ts"
+      ],
+      "@stores/*": [
+        "src/stores/*"
+      ],
+      "crypto": [
+        "node_modules/crypto-browserify"
       ],
     },
   },
