@@ -116,7 +116,7 @@ export default function Login () {
           color="primary"
           variant="bordered"
           size="lg"
-          onClick={() => navigate('/auth/register')}
+          onClick={() => navigate('/register')}
         >
           Sign Up
         </Button>

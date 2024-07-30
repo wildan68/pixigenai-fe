@@ -7,21 +7,41 @@ import DefaultLayout from '@/layouts/Default';
 import AuthLayout from '@/layouts/Auth';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
+import VerifyOTP from '@/pages/VerifyOTP';
+import SetupProfile from '@/pages/SetupProfile';
 import { AnimatePresence } from 'framer-motion';
 import { ToastContainer } from 'react-toastify'
 import { setAuthorizationHeader } from '@axios';
+import { useDispatch } from 'react-redux';
+import { userProfile } from '@stores/UserStores';
+import type { ThunkDispatch } from '@reduxjs/toolkit';
+import type { UnknownAction } from '@reduxjs/toolkit';
+import type { RootState } from '@/stores';
+import { useEffect } from 'react';
 
 function App() {
   // get token from local storage
   const token = localStorage.getItem('token')
 
-  if (token) {
-    setAuthorizationHeader(token)
-  }
+  const dispatch: ThunkDispatch<RootState, unknown, UnknownAction> = useDispatch()
+
+  useEffect(() => {
+    if (token) {
+      setAuthorizationHeader(token as string)
+
+      dispatch(userProfile({ id: null }))
+        .then(({ meta }) => {
+          if (meta.requestStatus === 'rejected') {
+            localStorage.removeItem('token')
+            window.open('/login', '_self')
+          }
+        })
+    }
+  }, [dispatch, token])
 
   const defaultMiddleware = () => {
     if (!token) {
-      return <Navigate to="/auth/login" />
+      return <Navigate to="/login" />
     }
 
     return <DefaultLayout/>
@@ -43,18 +63,18 @@ function App() {
         <ScrollToTop>
           <AnimatePresence>
             <Routes>
-              <Route path="/" element={defaultMiddleware()}>
+              <Route element={defaultMiddleware()}>
                 <Route index element={<Navigate to="/dashboard" />} />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="discover" element={<Discover />}/>
                 <Route path="*" element={<NotFound />} />
               </Route>
 
-              <Route path="/auth" element={authMiddleware()}>
-                <Route index element={<Navigate to="/auth/login" />} />
+              <Route element={authMiddleware()}>
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
-                <Route path="*" element={<Navigate to="/auth/login" />} />
+                <Route path="verify-otp" element={<VerifyOTP />} />
+                <Route path="setup-profile" element={<SetupProfile />} />
               </Route>
             </Routes>
           </AnimatePresence>

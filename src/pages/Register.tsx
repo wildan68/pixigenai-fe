@@ -4,6 +4,14 @@ import { FcGoogle } from 'react-icons/fc';
 import { TbEye, TbEyeOff, TbLock, TbMail } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import { authRegister } from '@stores/AuthStores';
+import type { ThunkDispatch } from '@reduxjs/toolkit';
+import type { UnknownAction } from '@reduxjs/toolkit';
+import type { RootState } from '@/stores';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 export default function Register () {
   const navigate = useNavigate()
@@ -12,6 +20,29 @@ export default function Register () {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   const toggleVisibilityConfirm = () => setIsVisibleConfirm(!isVisibleConfirm);
+
+  const dispatch: ThunkDispatch<RootState, unknown, UnknownAction> = useDispatch()
+
+  const { loading } = useSelector((state: RootState) => state.auth)
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    password: Yup.string().min(6, 'Must be 6 characters or more').required('Password is required'),
+    confirm_password: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
+  })
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(validationSchema)
+  })
+
+  const registerHandler = ({ email, password }: { email: string, password: string }) => {
+    dispatch(authRegister({ email, password }))
+      .then(({ meta }) => {
+        if (meta.requestStatus === 'fulfilled') {
+          navigate('/verify-otp')
+        }
+      })
+  }
 
   return (
     <motion.div   
@@ -23,7 +54,10 @@ export default function Register () {
     >
       <span className="text-2xl font-semibold">Sign Up</span>
 
-      <div className="flex flex-col gap-4">
+      <form 
+        className="flex flex-col gap-4" 
+        onSubmit={handleSubmit(registerHandler)}
+      >
         <Input 
           label="Email" 
           variant="bordered" 
@@ -34,6 +68,9 @@ export default function Register () {
           startContent={<TbMail/>}
           placeholder="Input email"
           isRequired
+          isInvalid={!!formState.errors.email}
+          errorMessage={formState.errors.email?.message}
+          {...register('email')}
         />
 
         <Input 
@@ -60,6 +97,9 @@ export default function Register () {
           }
           type={isVisible ? "text" : "password"}
           isRequired
+          isInvalid={!!formState.errors.password}
+          errorMessage={formState.errors.password?.message}
+          {...register('password')}
         />
 
         
@@ -87,12 +127,16 @@ export default function Register () {
           }
           type={isVisibleConfirm ? "text" : "password"}
           isRequired
+          isInvalid={!!formState.errors.confirm_password}
+          errorMessage={formState.errors.confirm_password?.message}
+          {...register('confirm_password')}
         />
 
         <Button
           color="primary"
           size="lg"
-          onClick={() => navigate('/')}
+          type="submit"
+          isLoading={loading}
         >
           Sign Up
         </Button>
@@ -107,7 +151,7 @@ export default function Register () {
           color="primary"
           variant="bordered"
           size="lg"
-          onClick={() => navigate('/auth/login')}
+          onClick={() => navigate('/login')}
         >
           Sign In
         </Button>
@@ -120,7 +164,7 @@ export default function Register () {
           <FcGoogle/>
           Sign in with Google
         </Button>
-      </div>
+      </form>
     </motion.div>
   )
 }
