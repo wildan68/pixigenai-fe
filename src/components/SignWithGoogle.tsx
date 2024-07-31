@@ -26,6 +26,7 @@ export default function SignWithGoogle () {
             return navigate('/setup-profile')
           }
 
+          localStorage.setItem('token', data.data.token)
           return window.open('/dashboard', '_self')
         })
     },
