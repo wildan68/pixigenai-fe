@@ -158,6 +158,71 @@ export const authSetupProfile = createAsyncThunk('AuthStores/authSetupProfile', 
   }
 })
 
+export const authForgotPassword = createAsyncThunk('AuthStores/authForgotPassword', async ({ email }: { email: string }, thunkAPI) => {
+  try {
+    return new Promise((resolve, reject) => {
+      thunkAPI.dispatch(setLoading(true)) 
+
+      axios.post('/auth/forgot-password', { email })
+        .then(({ data }) => {
+          toast(data.message, { type: 'success' })
+          return resolve(data)
+        })
+        .catch((err) => {
+          toast(err.response.data.message, { type: 'error' })
+          return reject(err)
+        })
+        .finally(() => thunkAPI.dispatch(setLoading(false)))
+    })
+  }
+  catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const authResetPasswordChecker = createAsyncThunk('AuthStores/authResetPasswordChecker', async ({ token }: { token: string }, thunkAPI) => {
+  try {
+    return new Promise((resolve, reject) => {
+      thunkAPI.dispatch(setLoading(true)) 
+
+      axios.post('/auth/reset-password-checker', { token })
+        .then(({ data }) => {
+          return resolve(data)
+        })
+        .catch((err) => {
+          toast(err.response.data.message, { type: 'error' })
+          return reject(err)
+        })
+        .finally(() => thunkAPI.dispatch(setLoading(false)))
+    })
+  }
+  catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const authResetPassword = createAsyncThunk('AuthStores/authResetPassword', async ({ token, password }: { token: string, password: string }, thunkAPI) => {
+  try {
+    return new Promise((resolve, reject) => {
+      thunkAPI.dispatch(setLoading(true)) 
+
+      axios.post('/auth/reset-password', { token, password })
+        .then(({ data }) => {
+          toast(data.message, { type: 'success' })
+          return resolve(data)
+        })
+        .catch((err) => {
+          toast(err.response.data.message, { type: 'error' })
+          return reject(err)
+        })
+        .finally(() => thunkAPI.dispatch(setLoading(false)))
+    })
+  }
+  catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
 export const authLogout = createAsyncThunk('AuthStores/authLogout', async () => {
   try {
     return new Promise((resolve) => {

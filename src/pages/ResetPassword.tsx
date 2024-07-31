@@ -1,20 +1,21 @@
-import { Button, Input } from '@nextui-org/react';
-import { useState } from 'react';
-import { TbEye, TbEyeOff, TbLock, TbMail } from 'react-icons/tb';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { authRegister } from '@stores/AuthStores';
+import { authResetPasswordChecker, authResetPassword } from '@stores/AuthStores';
 import type { ThunkDispatch } from '@reduxjs/toolkit';
 import type { UnknownAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/stores';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import SignWithGoogle from '@/components/SignWithGoogle';
+import { useCallback, useEffect, useState } from 'react';
+import { Button, Input } from '@nextui-org/react';
+import { TbLock, TbEye, TbEyeOff } from 'react-icons/tb';
 
-export default function Register () {
+export default function ResetPassword () {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const token = searchParams.get('token') as string
   const [isVisible, setIsVisible] = useState(false);
   const [isVisibleConfirm, setIsVisibleConfirm] = useState(false);
 
@@ -26,7 +27,6 @@ export default function Register () {
   const { loading } = useSelector((state: RootState) => state.auth)
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email address').required('Email is required'),
     password: Yup.string().min(6, 'Must be 6 characters or more').required('Password is required'),
     confirm_password: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
   })
@@ -35,14 +35,31 @@ export default function Register () {
     resolver: yupResolver(validationSchema)
   })
 
-  const registerHandler = ({ email, password }: { email: string, password: string }) => {
-    dispatch(authRegister({ email, password }))
+  const resetPasswordHandler = ({ password }: { password: string }) => {
+    dispatch(authResetPassword({ token, password }))
       .then(({ meta }) => {
         if (meta.requestStatus === 'fulfilled') {
-          navigate('/verify-otp')
+          return navigate('/login')
         }
       })
   }
+
+
+  const resetPasswordChecker = useCallback(() => {
+    dispatch(authResetPasswordChecker({ token }))
+      .then(({ meta }) => {
+        console.log(meta)
+        if (meta.requestStatus === 'rejected') {
+          return navigate('/login')
+        }
+      })
+  }, [dispatch, token, navigate])
+
+  useEffect(() => {
+    resetPasswordChecker()
+  }, [resetPasswordChecker])
+
+  if (!token) return <Navigate to="/login" />
 
   return (
     <motion.div   
@@ -52,27 +69,12 @@ export default function Register () {
       transition={{ duration: 0.3 }}
       className="flex flex-col w-full gap-6 px-6"
     >
-      <span className="text-2xl font-semibold">Sign Up</span>
+      <span className="text-2xl font-semibold">Reset Password</span>
 
       <form 
         className="flex flex-col gap-4" 
-        onSubmit={handleSubmit(registerHandler)}
+        onSubmit={handleSubmit(resetPasswordHandler)}
       >
-        <Input 
-          label="Email" 
-          variant="bordered" 
-          color="primary"
-          classNames={{
-            label: 'text-foreground',
-          }}
-          startContent={<TbMail/>}
-          placeholder="Input email"
-          isRequired
-          isInvalid={!!formState.errors.email}
-          errorMessage={formState.errors.email?.message}
-          {...register('email')}
-        />
-
         <Input 
           label="Password"
           variant="bordered" 
@@ -138,25 +140,9 @@ export default function Register () {
           type="submit"
           isLoading={loading}
         >
-          Sign Up
+          Reset Password
         </Button>
 
-        <div className="flex items-center justify-center gap-2">
-          <div className="bg-gray-700 h-[1px] flex-1"/>
-          <span className="text-xs text-gray-500">Already have an account?</span>
-          <div className="bg-gray-700  h-[1px] flex-1"/>
-        </div>
-
-        <Button
-          color="primary"
-          variant="bordered"
-          size="lg"
-          onClick={() => navigate('/login')}
-        >
-          Sign In
-        </Button>
-
-        <SignWithGoogle />
       </form>
     </motion.div>
   )

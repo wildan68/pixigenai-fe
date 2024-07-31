@@ -3,3 +3,7 @@
 @use 'toastify' as *;
 
 @use 'otp' as *;
+
+.bg-content1 {
+  @apply bg-background;
+}

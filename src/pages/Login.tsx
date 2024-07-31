@@ -12,10 +12,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import SignWithGoogle from '@/components/SignWithGoogle';
+import ForgotPassword from '@/components/modals/ForgotPassword';
 
 export default function Login () {
   const navigate = useNavigate()
   const [isVisible, setIsVisible] = useState(false)
+  const [modalForgotPassword, setModalForgotPassword] = useState(false)
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -97,6 +99,13 @@ export default function Login () {
           {...register('password')}
         />
 
+        <span 
+          className="text-xs transition-all cursor-pointer text-primary hover:text-primary/70"
+          onClick={() => setModalForgotPassword(true)}
+        >
+          Forgot Password?
+        </span>
+
         <Button
           color="primary"
           size="lg"
@@ -123,6 +132,8 @@ export default function Login () {
 
         <SignWithGoogle/>
       </form>
+
+      <ForgotPassword open={modalForgotPassword} onClose={() => setModalForgotPassword(false)}/>
     </motion.div>
   )
 }

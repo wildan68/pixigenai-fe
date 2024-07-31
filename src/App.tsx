@@ -9,6 +9,7 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import VerifyOTP from '@/pages/VerifyOTP';
 import SetupProfile from '@/pages/SetupProfile';
+import ResetPassword from '@/pages/ResetPassword';
 import { AnimatePresence } from 'framer-motion';
 import { ToastContainer } from 'react-toastify'
 import { setAuthorizationHeader } from '@axios';
@@ -79,6 +80,7 @@ function App() {
                   <Route path="register" element={<Register />} />
                   <Route path="verify-otp" element={<VerifyOTP />} />
                   <Route path="setup-profile" element={<SetupProfile />} />
+                  <Route path="reset-password" element={<ResetPassword />} />
                 </Route>
               </Routes>
             </AnimatePresence>
