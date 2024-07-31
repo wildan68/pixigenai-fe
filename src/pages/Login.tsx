@@ -1,6 +1,5 @@
 import { Button, Input } from '@nextui-org/react';
 import { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
 import { TbEye, TbEyeOff, TbLock, TbMail } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,6 +11,7 @@ import type { RootState } from '@/stores';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import SignWithGoogle from '@/components/SignWithGoogle';
 
 export default function Login () {
   const navigate = useNavigate()
@@ -121,14 +121,7 @@ export default function Login () {
           Sign Up
         </Button>
 
-        <Button
-          color="default"
-          variant="bordered"
-          size="lg"
-        >
-          <FcGoogle/>
-          Sign in with Google
-        </Button>
+        <SignWithGoogle/>
       </form>
     </motion.div>
   )

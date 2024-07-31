@@ -69,6 +69,7 @@ export default function SetupProfile () {
           isRequired
           isInvalid={!!formState.errors.fullname}
           errorMessage={formState.errors.fullname?.message}
+          value={registerForm.fullname}
           {...register('fullname')}
         />
 
