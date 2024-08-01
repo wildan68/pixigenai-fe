@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import AuthStores from '@stores/AuthStores'
 import UserStores from '@stores/UserStores'
+import DiscoverStores from '@stores/DiscoverStores'
 
 const store = configureStore({
   reducer: {
     auth: AuthStores,
-    user: UserStores
+    user: UserStores,
+    discover: DiscoverStores
   },
 });
 

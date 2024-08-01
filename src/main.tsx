@@ -10,13 +10,13 @@ import './styles/scss/index.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <NextUIProvider>
-      <NextThemesProvider defaultTheme='dark'>
-        <Provider store={stores}>
-          <App />
-        </Provider>
-      </NextThemesProvider>
-    </NextUIProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <NextUIProvider>
+    <NextThemesProvider defaultTheme='dark'>
+      <Provider store={stores}>
+        <App />
+      </Provider>
+    </NextThemesProvider>
+  </NextUIProvider>
+  // </React.StrictMode>,
 )

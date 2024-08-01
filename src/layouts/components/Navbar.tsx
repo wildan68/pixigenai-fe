@@ -21,7 +21,7 @@ export default function Navbar () {
   }
 
   return (
-    <div className="sticky top-0 px-6 py-3 border-b-[3px] border-b-bases bg-background flex justify-end items-center gap-6">
+    <div className="sticky top-0 px-6 py-3 border-b-[3px] border-b-bases bg-background flex justify-end items-center gap-6 z-50">
       <Button isIconOnly variant="light">
         <TbBell className='w-6 h-6'/>
       </Button>

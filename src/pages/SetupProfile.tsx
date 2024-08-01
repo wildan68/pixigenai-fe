@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { Button, Input } from '@nextui-org/react'
+import { Navigate } from 'react-router-dom'
 
 export default function SetupProfile () {
   const dispatch: ThunkDispatch<RootState, unknown, UnknownAction> = useDispatch()
@@ -19,7 +20,7 @@ export default function SetupProfile () {
     fullname: Yup.string().min(1, 'Must be 1 characters or more').required('Fullname is required'),
   })
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, setValue } = useForm({
     resolver: yupResolver(validationSchema)
   })
 
@@ -30,6 +31,12 @@ export default function SetupProfile () {
           window.open('/dashboard', '_self')
         }
       })
+  }
+
+  if (!registerForm.email && !registerForm.password) return <Navigate to="/login"/>
+
+  if (registerForm.fullname) {
+    setValue('fullname', registerForm.fullname)
   }
 
   return (
@@ -69,7 +76,6 @@ export default function SetupProfile () {
           isRequired
           isInvalid={!!formState.errors.fullname}
           errorMessage={formState.errors.fullname?.message}
-          value={registerForm.fullname}
           {...register('fullname')}
         />
 

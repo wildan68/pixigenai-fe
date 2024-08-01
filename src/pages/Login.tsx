@@ -1,4 +1,4 @@
-import { Button, Input } from '@nextui-org/react';
+import { Button, Checkbox, Input } from '@nextui-org/react';
 import { useState } from 'react';
 import { TbEye, TbEyeOff, TbLock, TbMail } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
@@ -99,12 +99,22 @@ export default function Login () {
           {...register('password')}
         />
 
-        <span 
-          className="text-xs transition-all cursor-pointer text-primary hover:text-primary/70"
-          onClick={() => setModalForgotPassword(true)}
-        >
+        <div className="flex items-center justify-between w-full">
+          <Checkbox
+            classNames={{
+              label: "text-small",
+            }}
+          >
+            Remember me
+          </Checkbox>
+
+          <span 
+            className="text-xs transition-all cursor-pointer text-primary hover:text-primary/70"
+            onClick={() => setModalForgotPassword(true)}
+          >
           Forgot Password?
-        </span>
+          </span>
+        </div>
 
         <Button
           color="primary"

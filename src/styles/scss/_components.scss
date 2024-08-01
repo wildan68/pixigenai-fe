@@ -1,0 +1,19 @@
+.discover-container {
+  column-count: 4;
+  column-gap: 16px; 
+
+  @media (max-width: 768px) {
+    column-count: 2;
+  }
+
+  @media (max-width: 1024px) {
+    column-count: 3;
+  }
+
+
+  .discover-items {
+    display: inline-block;
+    margin-bottom: 16px;
+    width: 100%;
+  }
+}

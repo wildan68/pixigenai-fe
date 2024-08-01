@@ -11,7 +11,8 @@ const authStores = createSlice({
       password: '',
       username: '',
       fullname: '',
-    }
+    },
+    authenticated: false
   },
   reducers: {
     setLoading (state, action) {
@@ -28,6 +29,9 @@ const authStores = createSlice({
     },
     setRegisterFullname (state, action) {
       state.registerForm.fullname = action.payload
+    },
+    setAuthenticated (state, action) {
+      state.authenticated = action.payload
     }
   },
 });
@@ -37,7 +41,8 @@ export const {
   setRegisterEmail,
   setRegisterPassword,
   setRegisterUsername,
-  setRegisterFullname
+  setRegisterFullname,
+  setAuthenticated
 } = authStores.actions;
 
 export const authLogin = createAsyncThunk('AuthStores/authLogin', async ({ email, password }: { email: string, password: string }, thunkAPI) => {
@@ -228,6 +233,20 @@ export const authLogout = createAsyncThunk('AuthStores/authLogout', async () => 
     return new Promise((resolve) => {
       localStorage.removeItem('token')
 
+      return resolve(new Promise(() => {}))
+    })
+  }
+  catch (error) {
+    return error
+  }
+})
+
+export const authSetAuthorization = createAsyncThunk('AuthStores/authSetAuthorization', async ({}, ThunkAPI) => {
+  try {
+    return new Promise((resolve) => {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+
+      ThunkAPI.dispatch(setAuthenticated(true))
       return resolve(new Promise(() => {}))
     })
   }

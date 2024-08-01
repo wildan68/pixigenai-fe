@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authVerifyOTP, authResendOTP } from '@stores/AuthStores'
 import type { ThunkDispatch } from '@reduxjs/toolkit'
@@ -81,6 +81,8 @@ export default function VerifyOTP () {
     // Cleanup interval on component unmount
     return () => clearInterval(timerIntervalRef.current);
   }, [registerForm, handlerOtpComplete])
+
+  if (!registerForm.email && !registerForm.password) return <Navigate to="/login"/>
   
   return (
     <motion.div   

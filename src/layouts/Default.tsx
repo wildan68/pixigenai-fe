@@ -2,9 +2,15 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '@layouts/components/Sidebar';
 import Navbar from '@layouts/components/Navbar';
 import { useState } from 'react';
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/stores';
 
 export default function DefaultLayout () {
   const [sidebarWidth] = useState(250)
+
+  const { authenticated } = useSelector((state: RootState) => state.auth)
+
+  if (!authenticated) return null
 
   return (
     <>

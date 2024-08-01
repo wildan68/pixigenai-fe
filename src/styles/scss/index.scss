@@ -4,6 +4,8 @@
 
 @use 'otp' as *;
 
+@use 'components' as *;
+
 .bg-content1 {
   @apply bg-background;
 }

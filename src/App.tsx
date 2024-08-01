@@ -12,20 +12,23 @@ import SetupProfile from '@/pages/SetupProfile';
 import ResetPassword from '@/pages/ResetPassword';
 import { AnimatePresence } from 'framer-motion';
 import { ToastContainer } from 'react-toastify'
-import { setAuthorizationHeader } from '@axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userProfile } from '@stores/UserStores';
+import { setAuthenticated } from './stores/AuthStores';
 import type { ThunkDispatch } from '@reduxjs/toolkit';
 import type { UnknownAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/stores';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import { setAuthorizationHeader } from './plugins/axios';
 
 function App() {
   // get token from local storage
   const token = localStorage.getItem('token')
 
   const dispatch: ThunkDispatch<RootState, unknown, UnknownAction> = useDispatch()
+
+  const { authenticated } = useSelector((state: RootState) => state.auth)
 
   const googleClientId: string = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
@@ -39,12 +42,16 @@ function App() {
             localStorage.removeItem('token')
             window.open('/login', '_self')
           }
+
+          if (meta.requestStatus === 'fulfilled') {
+            dispatch(setAuthenticated(true))
+          }
         })
     }
   }, [dispatch, token])
 
   const defaultMiddleware = () => {
-    if (!token) {
+    if (!token && !authenticated) {
       return <Navigate to="/login" />
     }
 
@@ -52,7 +59,7 @@ function App() {
   }
 
   const authMiddleware = () => {
-    if (token) {
+    if (token && authenticated) {
       return <Navigate to="/" />
     }
 
@@ -65,26 +72,28 @@ function App() {
 
       <GoogleOAuthProvider clientId={googleClientId}>
         <Router>
-          <ScrollToTop>
-            <AnimatePresence>
-              <Routes>
-                <Route element={defaultMiddleware()}>
-                  <Route index element={<Navigate to="/dashboard" />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="discover" element={<Discover />}/>
-                  <Route path="*" element={<NotFound />} />
-                </Route>
+          <Suspense fallback={<div>Loading...</div>}>
+            <ScrollToTop>
+              <AnimatePresence>
+                <Routes>
+                  <Route element={defaultMiddleware()}>
+                    <Route index element={<Navigate to="/dashboard" />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="discover" element={<Discover />}/>
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
 
-                <Route element={authMiddleware()}>
-                  <Route path="login" element={<Login />} />
-                  <Route path="register" element={<Register />} />
-                  <Route path="verify-otp" element={<VerifyOTP />} />
-                  <Route path="setup-profile" element={<SetupProfile />} />
-                  <Route path="reset-password" element={<ResetPassword />} />
-                </Route>
-              </Routes>
-            </AnimatePresence>
-          </ScrollToTop>
+                  <Route element={authMiddleware()}>
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Register />} />
+                    <Route path="verify-otp" element={<VerifyOTP />} />
+                    <Route path="setup-profile" element={<SetupProfile />} />
+                    <Route path="reset-password" element={<ResetPassword />} />
+                  </Route>
+                </Routes>
+              </AnimatePresence>
+            </ScrollToTop>
+          </Suspense>
         </Router>
       </GoogleOAuthProvider>
     </>
