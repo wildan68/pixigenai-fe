@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -12,6 +13,12 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 5000,
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTest.ts',
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
   },
   server: {
     port: 3000
