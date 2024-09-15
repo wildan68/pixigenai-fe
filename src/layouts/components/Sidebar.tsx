@@ -2,7 +2,7 @@ import Logo from '@assets/svg/logo.svg'
 import { ISideBarItem } from '@/types'
 import { useEffect, useState } from 'react'
 import { Listbox, ListboxItem } from "@nextui-org/react";
-import { TbLayoutDashboard, TbCompass, TbPhotoSearch, TbBookmarks, TbSparkles, TbPaint, TbPhotoSquareRounded, TbCreditCard, TbSettings } from 'react-icons/tb';
+import { TbLayoutDashboard, TbStar, TbSparkles, TbCreditCard, TbSettings } from 'react-icons/tb';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
@@ -13,29 +13,13 @@ export default function Sidebar ({ sidebarWidth = 250 }: { sidebarWidth?: number
       label: 'Dashboard',
       icon: <TbLayoutDashboard />,
     }, {
-      key: 'discover',
-      label: 'Discover',
-      icon: <TbCompass />,
-    }, {
-      key: 'search',
-      label: 'Search',
-      icon: <TbPhotoSearch />,
-    }, {
-      key: 'bookmarks',
-      label: 'Bookmarks',
-      icon: <TbBookmarks />,
-    }, {
-      key: 'manual-generate',
-      label: 'Manual Generate',
+      key: 'create',
+      label: 'Create Model',
       icon: <TbSparkles />,
     }, {
-      key: 'drawing',
-      label: 'Drawing',
-      icon: <TbPaint />,
-    }, {
-      key: 'my-catalog',
-      label: 'My Catalog',
-      icon: <TbPhotoSquareRounded />,
+      key: 'favorites',
+      label: 'Favorites',
+      icon: <TbStar />,
     }, {
       key: 'divider',
     }, {

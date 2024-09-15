@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from '@/pages/Dashboard';
-import Discover from '@/pages/Discover';
+import Create from '@/pages/Create';
 import ScrollToTop from '@/components/ScrollToTop';
 import NotFound from '@/pages/NotFound';
 import DefaultLayout from '@/layouts/Default';
@@ -79,7 +79,7 @@ function App() {
                   <Route element={defaultMiddleware()}>
                     <Route index element={<Navigate to="/dashboard" />} />
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="discover" element={<Discover />}/>
+                    <Route path="create" element={<Create />}/>
                     <Route path="*" element={<NotFound />} />
                   </Route>
 

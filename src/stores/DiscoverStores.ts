@@ -23,25 +23,13 @@ export const {
   setError
 } = discoverStores.actions
 
-export const getDiscover = createAsyncThunk('DiscoverStores/getDiscover', async ({ 
-  page,
-  per_page,
-  query
-}: {
-  page?: number
-  per_page?: number
-  query?: string
-}, thunkAPI) => {
+export const getDiscover = createAsyncThunk('DiscoverStores/getDiscover', async (_, thunkAPI) => {
   try {
     return new Promise((resolve, reject) => {
       thunkAPI.dispatch(setLoading(true)) 
       thunkAPI.dispatch(setError(false))
 
-      axios.get('/discover', { params: {
-        page,
-        per_page,
-        query
-      } })
+      axios.get('/discover')
         .then(({ data }) => {
           return resolve(data)
         })

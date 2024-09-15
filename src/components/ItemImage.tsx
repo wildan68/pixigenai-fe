@@ -1,21 +1,20 @@
 import { Button, Card, CardBody, CardFooter, Image } from '@nextui-org/react';
+import { useState } from 'react';
 import { TbBookmark } from 'react-icons/tb';
 
 export default function ItemImage ({ 
   src, 
   alt, 
-  key,
 }: { 
   src: string 
   alt: string 
-  key: string
 }) { 
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <Card 
       shadow="md" 
       isPressable onPress={() => console.log("item pressed")} 
-      key={key} 
       className="discover-items"
     >
       <CardBody className="p-0 overflow-visible">
@@ -24,8 +23,10 @@ export default function ItemImage ({
           radius="lg"
           width="100%"
           alt={alt}
-          className="object-cover w-full"
-          src={src}
+          className={`object-cover w-full ${!imageLoaded && 'min-h-[250px]'}`}
+          src={import.meta.env.VITE_APP_API_URL + '/assets/webp?id=' + src}
+          loading="lazy"
+          onLoad={() => setImageLoaded(true)}
         />
       </CardBody>
       <CardFooter className="flex flex-col items-start gap-4 text-left">
@@ -37,7 +38,7 @@ export default function ItemImage ({
           </Button>
 
           <Button color="primary" fullWidth>
-            Generate
+            Re-Generate
           </Button>
         </div>
       </CardFooter>
