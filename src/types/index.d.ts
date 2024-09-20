@@ -28,3 +28,26 @@ export interface IDiscoverItems {
   description:  string
   type:         string
 }
+
+export interface IModelItem {
+  id:                  string
+  user_id:             string
+  status:              string
+  result: {
+    model: {
+      id:               string
+      type:             string
+      url:              string  
+    }
+    thumbnail: {
+      id:               string
+      type:             string
+      url:              string  
+    }
+  }
+  draft_model_id:      string | null
+  prompt:              string
+  task_id:             string
+  type:                string
+  is_private:          boolean
+}

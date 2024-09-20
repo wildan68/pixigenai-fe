@@ -8,6 +8,7 @@ import stores from '@stores/index';
 import './styles/css/main.css'
 import './styles/scss/index.scss'
 import 'react-toastify/dist/ReactToastify.css'
+import '@google/model-viewer'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
